@@ -1,0 +1,17 @@
+### Pobierz listę zadań
+GET http://localhost:3001/tasks
+
+### Dodaj nowe zadanie
+POST http://localhost:3001/tasks
+Content-Type: application/json
+
+{
+  "text": "Zrobić zakupy"
+}
+
+### Update zadania
+PUT http://localhost:3001/tasks/1
+
+
+### Usuń zadania
+DELETE  http://localhost:3001/tasks/2
