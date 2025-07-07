@@ -15,3 +15,22 @@ PUT http://localhost:3001/tasks/1
 
 ### Usuń zadania
 DELETE  http://localhost:3001/tasks/2
+
+
+#### Rejestracja użytkownika
+POST http://localhost:3001/auth/register
+Content-Type: application/json
+
+{
+  "email": "nowy_uzytkownik",
+  "password": "haslo123"
+}
+
+### Logowanie użytkownika
+POST http://localhost:3001/auth/login
+Content-Type: application/json
+
+{
+  "email": "nowy_uzytkownik",
+  "password": "haslo123"
+}
