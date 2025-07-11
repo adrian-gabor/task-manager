@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, TextField, Paper, Typography, Box } from "@mui/material";
+import { loginUser } from "../api/loginUser"; 
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simple validation, no backend
-    if (username.trim() && password.trim()) {
-      onLogin(username);
-    } else {
-      setError("Wprowadź login i hasło.");
+    setError("");
+    try {
+      await loginUser(username, password);
+      onLogin();
+    } catch (err) {
+      setError(err || 'Wystąpił błąd podczas logowania.');
     }
   };
 

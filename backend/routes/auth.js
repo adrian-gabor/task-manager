@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
         const user = result.rows[0];
         if (!user) return res.status(401).json({ error: 'Niepoprawny dane logowania' });
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return res.status(401).json({ error: 'Nieprawidłowe dane logowania' });
+        if (!isValid) return res.status(401).json({ error: 'Złe hasło' });
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (err) {
