@@ -22,7 +22,7 @@ POST http://localhost:3001/auth/register
 Content-Type: application/json
 
 {
-  "email": "nowy_uzytkownik",
+  "email": "Adrian",
   "password": "haslo123"
 }
 
@@ -31,6 +31,6 @@ POST http://localhost:3001/auth/login
 Content-Type: application/json
 
 {
-  "email": "nowy_uzytkownik",
+  "email": "Adrian",
   "password": "haslo123"
 }
