@@ -7,15 +7,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'tajny_klucz';
 
 
 router.post('/register', async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Brak pola email lub hasło' });
+    const { email, password, firstname, lastname } = req.body;
+    if (!email || !password || !firstname || !lastname) {
+        return res.status(400).json({ error: 'Brak wszystkich pól' });
     }
     try {
         const hashed = await bcrypt.hash(password, 10);
         const result = await pool.query(
-            'INSERT INTO users (email, password) VALUES ($1, ($2)) RETURNING id, email',
-            [email, hashed]
+            'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING id, email, firstname, lastname',
+            [email, hashed, firstname, lastname]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {

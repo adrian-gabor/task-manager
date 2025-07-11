@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Button, TextField, Paper, Typography, Box } from "@mui/material";
 import { loginUser } from "../api/loginUser"; 
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +21,12 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const handleRegister = () => {
+        navigate('/register');
+    };
+
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" >
       <Paper elevation={3} sx={{ padding: 4, minWidth: 320 }}>
         <Typography variant="h5" align="center" gutterBottom>
           Logowanie
@@ -51,6 +58,9 @@ const Login = ({ onLogin }) => {
             Zaloguj się
           </Button>
         </form>
+        <Button onClick={handleRegister} variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
+            Zarejestruj się
+          </Button>
       </Paper>
     </Box>
   );

@@ -1,22 +1,36 @@
-
 import AppHeader from "./components/AppHeader";
 import TaskList from "./components/TaskList";
 import Login from "./components/Login";
+import Register from "./components/Register";
 import { useState } from "react";
-
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  if (!loggedIn) {
-    return <Login onLogin={() => setLoggedIn(true)} />;
-  }
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
 
   return (
-    <>
-      <AppHeader />
-      <TaskList />
-    </>
+    <Routes>
+      <Route path="/login" element={<Login onLogin={handleLogin} />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/"
+        element={
+          loggedIn ? (
+            <>
+              <AppHeader />
+              <TaskList />
+            </>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }
 
