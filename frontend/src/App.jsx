@@ -3,13 +3,15 @@ import TaskList from "./components/TaskList";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { useState } from "react";
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     setLoggedIn(true);
+    navigate('/');
   };
 
   return (

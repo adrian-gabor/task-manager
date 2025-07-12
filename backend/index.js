@@ -4,19 +4,31 @@ const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/task');
 const app = express();
 const port = 3001;
+const isAuthenticated = require('./middleware/isAuthenticated');
+
 
 app.use(express.json());
 app.use(logger);
 app.use(cors());
 app.use('/auth', authRoutes);
-app.use('/tasks', taskRoutes); 
+app.use('/tasks', isAuthenticated, taskRoutes); 
 
 
 
 
 function logger(req, res, next) {
-  console.log(req.originalUrl)
-  next()
+  const start = Date.now();
+
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const method = req.method;
+    const url = req.originalUrl;
+    const status = res.statusCode;
+
+
+    console.log(`[${new Date().toISOString()}] ${method} ${url} - ${status} (${duration}ms)`);
+  });
+  next();
 }
 
 

@@ -1,11 +1,12 @@
 import axios from 'axios';
+import apiClient from './apiClient';
 
 const API_URL = 'http://localhost:3001';
 
 
 export const addTask = async (text) => {
     try {
-        const response = await axios.post(`${API_URL}/tasks`, { text });
+        const response = await apiClient.post(`${API_URL}/tasks`, { text });
         console.log('Dodano zadanie:', response.data);
         return response.data;
     } catch (err) {
