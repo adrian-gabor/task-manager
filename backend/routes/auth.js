@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        return res.status(500).json({ error: 'Błąd serwera' });
+        next(err);
     }
 });
 
@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
     } catch (err) {
-        return res.status(500).json({ error: 'Błąd serwera' });
+        next(err);
     }
 });
 

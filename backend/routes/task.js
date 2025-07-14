@@ -3,17 +3,17 @@ const router = express.Router();
 const pool = require('../db');
 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const result = await pool.query('SELECT * FROM tasks');
     res.json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: 'Błąd' });
+    next(err);
   }
 });
 
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const { text } = req.body;
 
   if (!text) {
@@ -27,14 +27,13 @@ router.post('/', async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Błąd przy dodawaniu zadania:', err);
-    res.status(500).json({ error: 'Błąd serwera' });
+    next(err);
   }
 });
 
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', async (req, res, next) => {
   const taskId = Number(req.params.id);
   if (!taskId) {
     return res.status(400).json({ error: 'Brak Id' });
@@ -51,24 +50,24 @@ router.put('/:id', async (req, res) => {
     );
     res.status(200).json(result.rows[0]);
   } catch (err) {
-    res.status(500).json({ error: 'Błąd serwera' });
+    next(err);
   }
 })
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   const taskId = Number(req.params.id);
   if (!taskId) {
-    return res.status(400).json({ error: 'Brak Id' });
+     throw new BadRequestError('ID zadania musi być liczbą.');
   }
   try {
     const result = await pool.query('DELETE FROM tasks WHERE id = $1 RETURNING *', [taskId]);
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Zadanie nie znalezione' });
+      throw new NotFoundError('Zadanie o podanym ID nie istnieje.');
     }
     res.status(200).json({ deleted: result.rows[0] });
   } catch (err) {
-    res.status(500).json({ error: 'Błąd serwera' });
+    next(err);
   }
 })
 

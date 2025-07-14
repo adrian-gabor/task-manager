@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/task');
+const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const port = 3001;
 const isAuthenticated = require('./middleware/isAuthenticated');
@@ -12,6 +13,7 @@ app.use(logger);
 app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/tasks', isAuthenticated, taskRoutes); 
+app.use(errorHandler);
 
 
 
