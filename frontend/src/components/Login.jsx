@@ -1,29 +1,52 @@
 import { useState } from "react";
 import { Button, TextField, Paper, Typography, Box } from "@mui/material";
-import { loginUser } from "../api/loginUser"; 
+import { loginUser } from "../api/loginUser";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Wprowadź prawidłowy adres e-mail.");
+      return false;
+    }
+    setEmailError("");
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setEmailError("");
+
+
+    if (!validateEmail(username)) {
+      return;
+    }
+
     try {
       await loginUser(username, password);
       onLogin();
     } catch (err) {
-      setError(err || 'Wystąpił błąd podczas logowania.');
+      setError(err.message || 'Wystąpił błąd podczas logowania.');
     }
   };
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    validateEmail(e.target.value);
+  };
+
   const handleRegister = () => {
-        navigate('/register');
-    };
+    navigate('/register');
+  };
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" >
@@ -33,12 +56,15 @@ const Login = ({ onLogin }) => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
-            label="Login"
+            label="E-mail"
             variant="outlined"
             fullWidth
             margin="normal"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={handleUsernameChange}
+            required
+            error={!!emailError}
+            helperText={emailError}
           />
           <TextField
             label="Hasło"
@@ -48,6 +74,7 @@ const Login = ({ onLogin }) => {
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
           {error && (
             <Typography color="error" variant="body2" align="center">
@@ -59,8 +86,8 @@ const Login = ({ onLogin }) => {
           </Button>
         </form>
         <Button onClick={handleRegister} variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
-            Zarejestruj się
-          </Button>
+          Zarejestruj się
+        </Button>
       </Paper>
     </Box>
   );

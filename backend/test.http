@@ -1,11 +1,11 @@
 ### Pobierz listę zadań
 GET http://localhost:3001/tasks
-Authorization: Bearer {{token}}
+//Authorization: Bearer {{token}}
 
 ### Dodaj nowe zadanie
 POST http://localhost:3001/tasks
 Content-Type: application/json
-Authorization: Bearer {{token}}
+//Authorization: Bearer {{token}}
 
 {
   "text": "Zrobić zakupy"
@@ -17,7 +17,7 @@ PUT http://localhost:3001/tasks/1
 
 ### Usuń zadania
 DELETE  http://localhost:3001/tasks/44
-Authorization: Bearer {{token}}
+//Authorization: Bearer {{token}}
 
 
 #### Rejestracja użytkownika
@@ -36,4 +36,15 @@ Content-Type: application/json
 {
   "email": "Adrian",
   "password": "haslo123"
+}
+
+#### Rejestracja
+POST http://localhost:3001/auth/register
+Content-Type: application/json
+
+{
+  "email": "Adrian@",
+  "password": "haslo123",
+  "firstname": "Aaaaaaa",
+  "lastname": "Bbbbbbb"
 }
