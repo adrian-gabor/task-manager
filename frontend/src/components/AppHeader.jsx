@@ -12,7 +12,6 @@ const AppHeader = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Moja Lista Zadań
         </Typography>
-        <Button  color="inherit">Dodaj Zadanie</Button>
       </Toolbar>
     </AppBar>
   );

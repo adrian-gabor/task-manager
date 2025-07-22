@@ -4,8 +4,9 @@ const pool = require('../db');
 
 
 router.get('/', async (req, res, next) => {
+  const userId = req.user;
   try {
-    const result = await pool.query('SELECT * FROM tasks');
+    const result = await pool.query('SELECT * FROM tasks WHERE userid = $1', [userId]);
     res.json(result.rows);
   } catch (err) {
     next(err);
@@ -15,6 +16,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { text } = req.body;
+  const userId = req.user;
 
   if (!text) {
     return res.status(400).json({ error: 'Brak pola text' });
@@ -22,8 +24,8 @@ router.post('/', async (req, res, next) => {
 
   try {
     const result = await pool.query(
-      'INSERT INTO tasks (text) VALUES ($1) RETURNING *',
-      [text]
+      'INSERT INTO tasks (text, userid) VALUES ($1, $2) RETURNING *',
+      [text, userId]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {

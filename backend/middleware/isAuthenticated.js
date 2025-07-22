@@ -17,7 +17,7 @@ function isAuthenticated(req, res, next) {
         if (err) {
         return res.status(403).json({ error: 'Token jest nieprawidłowy lub wygasł.' });
         }
-        req.user = decoded;
+        req.user = decoded.id;
         next();
     });
     }
