@@ -2,13 +2,15 @@ import { useState } from "react";
 import { Button, TextField, Paper, Typography, Box } from "@mui/material";
 import { loginUser } from "../api/loginUser";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
 
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const validateEmail = (email) => {
@@ -32,8 +34,9 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      await loginUser(username, password);
-      onLogin();
+      const response = await loginUser(username, password);
+      login(response.token);
+      navigate('/');
     } catch (err) {
       setError(err.message || 'Wystąpił błąd podczas logowania.');
     }

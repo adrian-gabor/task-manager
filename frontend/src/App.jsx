@@ -2,28 +2,22 @@ import AppHeader from "./components/AppHeader";
 import TaskList from "./components/TaskList";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from "./context/AuthContext";
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    setLoggedIn(true);
-    navigate('/');
-  };
+  const { loggedIn } = useAuth();
 
   return (
     <Routes>
-      <Route path="/login" element={<Login onLogin={handleLogin} />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
         path="/"
         element={
           loggedIn ? (
             <>
-              <AppHeader />
+              <AppHeader /> 
               <TaskList />
             </>
           ) : (
@@ -31,7 +25,7 @@ const App = () => {
           )
         }
       />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={loggedIn ? <Navigate to="/" replace /> : <Navigate to="/login" replace />} />
     </Routes>
   );
 }
