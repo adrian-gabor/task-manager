@@ -25,3 +25,4 @@ Thumbs.db
 # IDE specific files
 .vscode/
 backend/test.http
+.cursor/
