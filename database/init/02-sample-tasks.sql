@@ -1,0 +1,16 @@
+INSERT INTO tasks (text, done, userid) VALUES
+('Przeanalizować dokumentację Material UI v7', false, 1),
+('Stworzyć komponent z formularzem logowania', false, 1),
+('Zaimplementować routing z react-router-dom', true, 1),
+('Dodać obsługę błędów API w komponentach', false, 1),
+('Przetestować responsywność na różnych urządzeniach', false, 1),
+('Zoptymalizować wydajność komponentów React', false, 1),
+('Dodać animacje i przejścia CSS', true, 1),
+('Stworzyć system notyfikacji dla użytkownika', false, 1),
+('Zaimplementować dark mode toggle', false, 1),
+('Przygotować prezentację projektu', false, 1),
+('Nauczyć się TypeScript dla React', false, 1),
+('Stworzyć testy jednostkowe z Jest', false, 1),
+('Zoptymalizować bundle size aplikacji', false, 1),
+('Dodać PWA funkcjonalności', false, 1),
+('Przygotować dokumentację komponentów', true, 1); 
