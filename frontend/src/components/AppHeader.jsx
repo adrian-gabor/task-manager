@@ -2,15 +2,17 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
-import { useAuth } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../store/authSlice';
  
 const AppHeader = () => {
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector(state => state.auth);
   
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate('/login');
   }
 
@@ -20,6 +22,11 @@ const AppHeader = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Moja Lista Zadań
         </Typography>
+        {user && (
+          <Typography variant="body2" sx={{ mr: 2 }}>
+            Witaj, {user.firstname}!
+          </Typography>
+        )}
         <Button color="inherit" onClick={handleLogout}>Wyloguj</Button>
       </Toolbar>
     </AppBar>

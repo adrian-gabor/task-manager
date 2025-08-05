@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const pool = require('../db');
 const JWT_SECRET = process.env.JWT_SECRET || 'tajny_klucz';
 const { body, validationResult } = require('express-validator');
+const isAuthenticated = require('../middleware/isAuthenticated');
 
 const validateRegister = [
     body('email')
@@ -73,7 +74,21 @@ router.post('/login',validateLogin, async (req, res) => {
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) return res.status(401).json({ error: 'Niepoprawny dane logowania' });
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        res.json({ token, user: { id: user.id, email: user.email, firstname: user.firstname, lastname: user.lastname } });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Endpoint do sprawdzania tokenu
+router.get('/me', isAuthenticated, async (req, res) => {
+    try {
+        const result = await pool.query('SELECT id, email, firstname, lastname FROM users WHERE id = $1', [req.user]);
+        const user = result.rows[0];
+        if (!user) {
+            return res.status(404).json({ error: 'Użytkownik nie znaleziony' });
+        }
+        res.json({ user });
     } catch (err) {
         next(err);
     }

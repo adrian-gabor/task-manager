@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Button, TextField, Paper, Typography, Box } from "@mui/material";
-import { loginUser } from "../api/loginUser";
+import { Button, TextField, Paper, Typography, Box, Alert, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, clearError } from "../store/authSlice";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  const { login } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error } = useSelector(state => state.auth);
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,20 +25,18 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    dispatch(clearError());
     setEmailError("");
-
 
     if (!validateEmail(username)) {
       return;
     }
 
     try {
-      const response = await loginUser(username, password);
-      login(response.token);
+      await dispatch(loginUser({ email: username, password })).unwrap();
       navigate('/');
     } catch (err) {
-      setError(err.message || 'Wystąpił błąd podczas logowania.');
+      console.error('Login failed:', err);
     }
   };
 
@@ -68,6 +66,7 @@ const Login = () => {
             required
             error={!!emailError}
             helperText={emailError}
+            disabled={loading}
           />
           <TextField
             label="Hasło"
@@ -78,17 +77,32 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
           {error && (
-            <Typography color="error" variant="body2" align="center">
+            <Alert severity="error" sx={{ mt: 2 }}>
               {error}
-            </Typography>
+            </Alert>
           )}
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-            Zaloguj się
+          <Button 
+            type="submit" 
+            variant="contained" 
+            color="primary" 
+            fullWidth 
+            sx={{ mt: 2 }}
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={20} /> : 'Zaloguj się'}
           </Button>
         </form>
-        <Button onClick={handleRegister} variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
+        <Button 
+          onClick={handleRegister} 
+          variant="outlined" 
+          color="primary" 
+          fullWidth 
+          sx={{ mt: 1 }}
+          disabled={loading}
+        >
           Zarejestruj się
         </Button>
       </Paper>

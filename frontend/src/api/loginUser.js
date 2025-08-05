@@ -1,7 +1,7 @@
 import apiClient from '../api/apiClient';
 
-export const loginUser = async (email, password) => {
-    const response = await apiClient.post('/auth/login', { email, password });
+export const loginUser = async (credentials) => {
+    const response = await apiClient.post('/auth/login', credentials);
     
     if (response.data.token) {
         localStorage.setItem('token', response.data.token);
